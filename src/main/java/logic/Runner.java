@@ -49,8 +49,9 @@ public class Runner {
     public static void main(String ...args) throws IOException{
     	 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     	 String isExit = "";
+         FsPool fsPool = new FsPool();
          do {
-        	 for(File file: getNewFiles(new File("c:\\Programming\\Examples 9 java\\workspace\\fsArchiver"))){
+        	 for(File file: fsPool.getNewFiles(new File("c:\\Programming\\Examples 9 java\\workspace\\fsArchiver"))){
         		 System.out.println(file);
         	 }
              System.out.println("Enter \"" + exit + "\" to exit, or enter any other to reload properties and re-process fileName...");
@@ -61,14 +62,4 @@ public class Runner {
          bufferedReader.close();
     }
     
-    static private List<File> existed=new ArrayList<File>();
-    public static File[] getNewFiles(File dir){
-    	File[] files = dir.listFiles();
-    	for(File file: files){
-    		if(!existed.contains(file)){
-    			existed.add(file);
-    		}
-    	}
-		return files;
-    }
 }
