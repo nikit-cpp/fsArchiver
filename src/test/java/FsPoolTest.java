@@ -37,6 +37,7 @@ public class FsPoolTest {
 
         File[] expectedPortion1 = file.listFiles();
         List<File> portion1 = fsPool.getNewFiles(file);
+        System.out.println(portion1);
         System.out.println("portion1\t" + portion1.size());
         assertEquals(3, portion1.size());
         assertTrue(Arrays.asList(expectedPortion1).containsAll(portion1));
