@@ -5,8 +5,12 @@ import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nik on 05.11.14.
@@ -14,7 +18,7 @@ import java.util.ArrayList;
 public class Runner {
     static String filesDir = "/home/nik/images";
 
-    public static void main(String... args) throws ZipException {
+    /*public static void main(String... args) throws ZipException {
         ZipParameters parameters = new ZipParameters();
         parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE); // set compression method to deflate compression
 
@@ -38,5 +42,33 @@ public class Runner {
                 zipFile.addFile(file, parameters);
             }
         }
+    }*/
+    
+    static String exit = "q";
+    
+    public static void main(String ...args) throws IOException{
+    	 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    	 String isExit = "";
+         do {
+        	 for(File file: getNewFiles(new File("c:\\Programming\\Examples 9 java\\workspace\\fsArchiver"))){
+        		 System.out.println(file);
+        	 }
+             System.out.println("Enter \"" + exit + "\" to exit, or enter any other to reload properties and re-process fileName...");
+
+             isExit = bufferedReader.readLine();
+         } while (!isExit.equals(exit));
+
+         bufferedReader.close();
+    }
+    
+    static private List<File> existed=new ArrayList<File>();
+    public static File[] getNewFiles(File dir){
+    	File[] files = dir.listFiles();
+    	for(File file: files){
+    		if(!existed.contains(file)){
+    			existed.add(file);
+    		}
+    	}
+		return files;
     }
 }
