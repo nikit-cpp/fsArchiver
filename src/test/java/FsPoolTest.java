@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -66,8 +67,8 @@ public class FsPoolTest {
         assertEquals(0, portion5.size());
         assertTrue(Arrays.asList(expectedPortion5).containsAll(portion5));
 
-        Thread.sleep(1000);
-        FileUtils.writeStringToFile(newFile, "i am string!");
+        Date newDate = new Date("01/31/1998");
+        newFile.setLastModified( newDate.getTime());
         System.out.println("lastModified "+newFile.lastModified());
         File[] expectedPortion6 = new File[]{newFile};
         List<File> portion6 = fsPool.getNewFiles(file);
