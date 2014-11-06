@@ -1,0 +1,10 @@
+!.gitignore
+bin
+target
+.settings
+.metadata
+.classpath
+.project
+.idea
+*.iml
+my.properties
