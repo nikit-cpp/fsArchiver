@@ -1,4 +1,5 @@
 import logic.FsPool;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,5 +64,12 @@ public class FsPoolTest {
         System.out.println("portion5\t" + portion5.size());
         assertEquals(0, portion5.size());
         assertTrue(Arrays.asList(expectedPortion5).containsAll(portion5));
+
+        FileUtils.writeStringToFile(newFile, "i am string!");
+        File[] expectedPortion6 = new File[]{newFile};
+        List<File> portion6 = fsPool.getNewFiles(file);
+        System.out.println("portion6\t" + portion6.size());
+        assertEquals(1, portion6.size());
+        assertTrue(Arrays.asList(expectedPortion6).containsAll(portion6));
     }
 }
