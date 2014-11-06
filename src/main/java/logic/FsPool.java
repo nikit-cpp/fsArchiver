@@ -22,7 +22,16 @@ public class FsPool {
 
         List<File> returned = new ArrayList<File>(current);
 
-        returned.removeAll(existes);
+        //returned.removeAll(existes);
+
+        for(int i=0; i<returned.size(); ){
+            if(existes.contains(returned.get(i))){
+                // TODO если в элементе current дата новее
+                returned.remove(i);
+                continue;
+            }
+            ++i;
+        }
 
         existes.addAll(current);
 

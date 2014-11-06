@@ -65,11 +65,17 @@ public class FsPoolTest {
         assertEquals(0, portion5.size());
         assertTrue(Arrays.asList(expectedPortion5).containsAll(portion5));
 
-        FileUtils.writeStringToFile(newFile, "i am string!");
+        /*FileUtils.writeStringToFile(newFile, "i am string!");
         File[] expectedPortion6 = new File[]{newFile};
         List<File> portion6 = fsPool.getNewFiles(file);
         System.out.println("portion6\t" + portion6.size());
         assertEquals(1, portion6.size());
-        assertTrue(Arrays.asList(expectedPortion6).containsAll(portion6));
+        assertTrue(Arrays.asList(expectedPortion6).containsAll(portion6));*/
+
+        File[] expectedPortion7 = new File[]{};
+        List<File> portion7 = fsPool.getNewFiles(file);
+        System.out.println("portion7\t" + portion7.size());
+        assertEquals(0, portion7.size());
+        assertTrue(Arrays.asList(expectedPortion7).containsAll(portion7));
     }
 }
