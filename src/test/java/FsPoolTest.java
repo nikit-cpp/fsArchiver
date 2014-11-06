@@ -31,7 +31,7 @@ public class FsPoolTest {
     }
 
     @Test
-    public void testGettingNewFilesFromPool() throws IOException {
+    public void testGettingNewFilesFromPool() throws IOException, InterruptedException {
         File file = new File("src/test/resources");
 
         File[] expectedPortion1 = file.listFiles();
@@ -54,6 +54,7 @@ public class FsPoolTest {
 
         newFile.createNewFile();
         File[] expectedPortion4 = new File[]{newFile};
+        System.out.println("lastModified "+newFile.lastModified());
         List<File> portion4 = fsPool.getNewFiles(file);
         System.out.println("portion4\t" + portion4.size());
         assertEquals(1, portion4.size());
@@ -65,12 +66,14 @@ public class FsPoolTest {
         assertEquals(0, portion5.size());
         assertTrue(Arrays.asList(expectedPortion5).containsAll(portion5));
 
-        /*FileUtils.writeStringToFile(newFile, "i am string!");
+        Thread.sleep(1000);
+        FileUtils.writeStringToFile(newFile, "i am string!");
+        System.out.println("lastModified "+newFile.lastModified());
         File[] expectedPortion6 = new File[]{newFile};
         List<File> portion6 = fsPool.getNewFiles(file);
         System.out.println("portion6\t" + portion6.size());
         assertEquals(1, portion6.size());
-        assertTrue(Arrays.asList(expectedPortion6).containsAll(portion6));*/
+        assertTrue(Arrays.asList(expectedPortion6).containsAll(portion6));
 
         File[] expectedPortion7 = new File[]{};
         List<File> portion7 = fsPool.getNewFiles(file);
