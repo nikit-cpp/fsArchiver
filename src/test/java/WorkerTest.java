@@ -23,7 +23,7 @@ public class WorkerTest {
 
     @Before
     public void setUp() throws Exception {
-        outputDir.delete();
+        //outputDir.delete();
         outputDir.mkdir();
     }
 
