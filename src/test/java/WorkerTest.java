@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 
+import static org.junit.Assert.assertTrue;
+
 public class WorkerTest {
 
     File inputDir = new File("src/test/resources");
@@ -20,11 +22,11 @@ public class WorkerTest {
 
     @After
     public void tearDown() throws Exception {
-        outputDir.delete();
+        //outputDir.delete();
     }
 
     @Test
-    public void testScenario(){
+    public void testScenario() throws Exception {
         //create stub files in input directory(already exists, test/resources)
         //get list of files in input directory
         File[] listInput1 = inputDir.listFiles();
@@ -37,6 +39,7 @@ public class WorkerTest {
         //call businnes logic function
         worker.work();
         //assertThat files in output directory present
+        assertTrue(outputDir.listFiles().length!=0);
         //get count of files in output directory
         //get list of files in output directory
         //assertThat count of files in input directory == count of files in output directory
