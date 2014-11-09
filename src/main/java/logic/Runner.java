@@ -45,7 +45,12 @@ public class Runner {
     }*/
     
     static String exit = "q";
-    
+
+    /**
+     *
+     * @param args входная и выходная директории
+     * @throws IOException
+     */
     public static void main(String ...args) throws IOException{
     	 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     	 String isExit = "";
@@ -56,6 +61,7 @@ public class Runner {
         	 }
              System.out.println("Enter \"" + exit + "\" to exit, or enter any other to reload properties and re-process fileName...");
 
+             // TODO убрать в другой лаунчер
              isExit = bufferedReader.readLine();
          } while (!isExit.equals(exit));
 
