@@ -1,24 +1,41 @@
 import junit.framework.TestCase;
+import logic.Worker;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-public class RunnerTest extends TestCase {
+import java.io.File;
 
+public class RunnerTest {
+
+    File inputDir = new File("src/test/resources");
+    File outputDir = new File("src/test/out-resources");
+
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
-
+        outputDir.delete();
+        outputDir.mkdir();
     }
 
+    @After
     public void tearDown() throws Exception {
-
+        outputDir.delete();
     }
 
+    @Test
     public void testScenario(){
-        //createTmpFolder
         //create stub files in input directory(already exists, test/resources)
         //get list of files in input directory
+        File[] listInput1 = inputDir.listFiles();
         //get count of files in input directory
+        int count1 = listInput1.length;
         //create argument string
 
+        Worker worker = new Worker(inputDir, outputDir);
+
         //call businnes logic function
+        worker.work();
         //assertThat files in output directory present
         //get count of files in output directory
         //get list of files in output directory
