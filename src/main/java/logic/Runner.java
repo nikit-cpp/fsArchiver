@@ -21,35 +21,10 @@ public class Runner {
     static String filesDir = "/home/nik/images";
     public static Logger LOGGER = Logger.getLogger(Runner.class);
 
-    /*public static void main(String... args) throws ZipException {
-        ZipParameters parameters = new ZipParameters();
-        parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE); // set compression method to deflate compression
-
-        // Set the compression level. This value has to be in between 0 to 9
-        // Several predefined compression levels are available
-        // DEFLATE_LEVEL_FASTEST - Lowest compression level but higher speed of compression
-        // DEFLATE_LEVEL_FAST - Low compression level but higher speed of compression
-        // DEFLATE_LEVEL_NORMAL - Optimal balance between compression level/speed
-        // DEFLATE_LEVEL_MAXIMUM - High compression level with a compromise of speed
-        // DEFLATE_LEVEL_ULTRA - Highest compression level but low speed
-        parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
-
-        File dir = new File(filesDir);
-
-        for(File file: dir.listFiles()){
-            ZipFile zipFile = new ZipFile(file.getAbsoluteFile() + ".zip");
-            //file.lastModified();
-            if(file.isDirectory()){
-                zipFile.addFolder(file, parameters);
-            }else {
-                zipFile.addFile(file, parameters);
-            }
-        }
-    }*/
-    
-    static String exit = "q";
-
-    static String INPUT_DIR_OPTION = "inputDir";
+    static String INPUT_DIR_OPTION = "input";
+    static String OUTPUT_DIR_OPTION = "output";
+    static String SLEEP_TIME_OPTION = "sleep";
+    static String HELP_OPTION = "help";
 
     /**
      *
@@ -62,17 +37,43 @@ public class Runner {
         Option inputDirOption = OptionBuilder.withLongOpt(INPUT_DIR_OPTION)
                 .withArgName("input directory")
                 .hasArg()
-                .withDescription("Directory which contains input files. This directory will be scanned")
+                .withDescription("Directory which contains input files. This directory will be scanned.")
                 .isRequired()
                 .create("i");
+
+        Option outputDirOption = OptionBuilder.withLongOpt(OUTPUT_DIR_OPTION)
+                .withArgName("output directory")
+                .hasArg()
+                .withDescription("Directory which will be contains output files.")
+                .isRequired()
+                .create("o");
+
+        Option sleepTimeOption = OptionBuilder.withLongOpt(SLEEP_TIME_OPTION)
+                .withArgName("seconds")
+                .hasArg()
+                .withDescription("interval in seconds, on expiry it scanning input directory will be invoked.")
+                .isRequired()
+                .create("s");
+
+        Option helpOption = OptionBuilder.withLongOpt(HELP_OPTION)
+                .withDescription("show this help :)")
+                .create("h");
 
         HelpFormatter formatter = new HelpFormatter();
 
         options.addOption(inputDirOption);
+        options.addOption(outputDirOption);
+        options.addOption(sleepTimeOption);
+        options.addOption(helpOption);
+
         CommandLineParser cmdLinePosixParser = new PosixParser();// создаем Posix парсер
 
         try {
             CommandLine commandLine = cmdLinePosixParser.parse(options, args);// парсим командную строку
+            if(commandLine.hasOption(HELP_OPTION)){
+                formatter.printHelp("fsArchiver", options);
+            }
+
             String inputDirValue = commandLine.getOptionValue(INPUT_DIR_OPTION);// если такая опция есть, то получаем переданные ей аргументы
             System.out.println("We try to inputDir: " + inputDirValue);// выводим переданный логин
         } catch (ParseException e) {
@@ -80,23 +81,4 @@ public class Runner {
             formatter.printHelp("fsArchiver", options);
         }
     }
-
-
-    /*public static void main(String ...args) throws IOException{
-    	 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-    	 String isExit = "";
-         FsPool fsPool = new FsPool();
-         do {
-        	 for(File file: fsPool.getNewFiles(new File("c:\\Programming\\Examples 9 java\\workspace\\fsArchiver"))){
-        		 System.out.println(file);
-        	 }
-             System.out.println("Enter \"" + exit + "\" to exit, or enter any other to reload properties and re-process fileName...");
-
-             // TODO убрать в другой лаунчер
-             isExit = bufferedReader.readLine();
-         } while (!isExit.equals(exit));
-
-         bufferedReader.close();
-    }*/
-    
 }
