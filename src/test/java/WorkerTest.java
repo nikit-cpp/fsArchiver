@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 
-public class RunnerTest {
+public class WorkerTest {
 
     File inputDir = new File("src/test/resources");
     File outputDir = new File("src/test/out-resources");
