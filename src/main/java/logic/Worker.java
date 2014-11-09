@@ -36,7 +36,7 @@ public class Worker {
         parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 
         for(File inputFile: inputFilesList) {
-            File outFile = new File(outputDir, inputFile.getName() + ".zip");
+            File outFile = convertInputFileToOutputFile(inputFile, outputDir);
             ZipFile zipFile = new ZipFile(outFile);
 
             if(inputFile.isDirectory()){
@@ -45,5 +45,15 @@ public class Worker {
                 zipFile.addFile(inputFile, parameters);
             }
         }
+    }
+
+    /**
+     * Прелобазует файловые объекты в Java, не работает с файловой системой.
+     * @param inputFile
+     * @param outputDir
+     * @return
+     */
+    public static File convertInputFileToOutputFile(File inputFile, File outputDir){
+        return new File(outputDir, inputFile.getName() + ".zip");
     }
 }

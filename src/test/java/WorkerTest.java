@@ -1,11 +1,18 @@
 import junit.framework.TestCase;
+import junitx.framework.ListAssert;
 import logic.Worker;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -22,7 +29,7 @@ public class WorkerTest {
 
     @After
     public void tearDown() throws Exception {
-        outputDir.delete();
+        //outputDir.delete();
     }
 
     @Test
@@ -38,12 +45,16 @@ public class WorkerTest {
 
         //call businnes logic function
         worker.work();
-        //assertThat files in output directory are present
-        assertTrue(outputDir.listFiles().length!=0);
-        //get count of files in output directory
         //get list of files in output directory
+        File[] listOutput1 = outputDir.listFiles();
+        //get count of files in output directory
+        int count2 = listOutput1.length;
+        //assertThat files in output directory are present
+        Assert.assertTrue(count2 != 0);
         //assertThat count of files in input directory == count of files in output directory
+        Assert.assertEquals(count1, count2);
         //assertThat list of files in input directory equals list of files in output directory
+        assertInputOutputFileEquals(listInput1, listOutput1);
 
         //call businnes logic function again
         //get count of files in output directory
@@ -59,5 +70,16 @@ public class WorkerTest {
         //get list of files in output directory
         //assertThat count of files in output directory is ++
         //assertThat list of files in output directory is ++
+    }
+
+    public void assertInputOutputFileEquals(File[] input, File[] output){
+        List<File> causedOutList = new ArrayList<File>();
+        for(File i: input) {
+            File causedOutFile = Worker.convertInputFileToOutputFile(i, outputDir);
+            causedOutList.add(causedOutFile);
+        }
+        List<File> expectedOutList = Arrays.asList(output);
+        // Сравнивает списки, игнорируя порядок
+        ListAssert.assertEquals(expectedOutList, causedOutList);
     }
 }
