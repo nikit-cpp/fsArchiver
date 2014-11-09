@@ -22,7 +22,7 @@ public class WorkerTest {
 
     @After
     public void tearDown() throws Exception {
-        //outputDir.delete();
+        outputDir.delete();
     }
 
     @Test
@@ -38,7 +38,7 @@ public class WorkerTest {
 
         //call businnes logic function
         worker.work();
-        //assertThat files in output directory present
+        //assertThat files in output directory are present
         assertTrue(outputDir.listFiles().length!=0);
         //get count of files in output directory
         //get list of files in output directory
