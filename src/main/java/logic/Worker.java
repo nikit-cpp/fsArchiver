@@ -5,7 +5,12 @@ import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Created by nik on 09.11.14.
@@ -17,6 +22,7 @@ public class Worker {
     private File inputDir;
     private File outputDir;
     private FsPool fsPool;
+    private int nThreads = 4;
 
     public Worker(File inputDir, File outputDir){
         this.inputDir=inputDir;
@@ -30,12 +36,41 @@ public class Worker {
     }
 
     // TODO Возможен перенос в отдельный класс при необходимости
-    private void zip(List<File> inputFilesList, File outputDir) throws ZipException {
-        ZipParameters parameters = new ZipParameters();
+    private void zip(final List<File> inputFilesList, final File outputDir) throws ZipException {
+        final ZipParameters parameters = new ZipParameters();
         parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
         parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 
-        for(File inputFile: inputFilesList) {
+        // МНОГОПОТОЧНОСТЬ
+        ExecutorService service = Executors.newFixedThreadPool(nThreads);
+        List<Callable<Void>> processFileTasks = new ArrayList<Callable<Void>>();
+        for(final File inputFile: inputFilesList){
+
+            processFileTasks.add(new Callable<Void>() {
+                public Void call() throws Exception {
+                    File outFile = convertInputFileToOutputFile(inputFile, outputDir);
+                    ZipFile zipFile = new ZipFile(outFile);
+
+                    if(inputFile.isDirectory()){
+                        zipFile.addFolder(inputFile, parameters);
+                    }else {
+                        zipFile.addFile(inputFile, parameters);
+                    }
+                    return null;
+                }
+            });
+        }
+        try {
+            List<Future<Void>> futures = service
+                    .invokeAll(processFileTasks);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            service.shutdown();
+        }
+
+        // ОДНОПОТОЧНОСТЬ
+        /*for(File inputFile: inputFilesList) {
             File outFile = convertInputFileToOutputFile(inputFile, outputDir);
             ZipFile zipFile = new ZipFile(outFile);
 
@@ -44,7 +79,7 @@ public class Worker {
             }else {
                 zipFile.addFile(inputFile, parameters);
             }
-        }
+        }*/
     }
 
     /**
