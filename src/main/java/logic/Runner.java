@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by nik on 05.11.14.
@@ -25,6 +27,7 @@ public class Runner {
     static String OUTPUT_DIR_OPTION = "output";
     static String SLEEP_TIME_OPTION = "sleep";
     static String HELP_OPTION = "help";
+    static String NUM_THREADS_OPTION = "threads";
 
     /**
      *
@@ -39,6 +42,7 @@ public class Runner {
                 .hasArg()
                 .withDescription("Directory which contains input files. This directory will be scanned.")
                 .isRequired()
+                .withType(File.class)
                 .create("i");
 
         Option outputDirOption = OptionBuilder.withLongOpt(OUTPUT_DIR_OPTION)
@@ -46,14 +50,26 @@ public class Runner {
                 .hasArg()
                 .withDescription("Directory which will be contains output files.")
                 .isRequired()
+                .withType(File.class)
                 .create("o");
 
+        // http://stackoverflow.com/questions/5585634/apache-commons-cli-option-type-and-default-value
+        // http://svn.apache.org/viewvc/commons/proper/cli/trunk/src/main/java/org/apache/commons/cli/TypeHandler.java?view=markup
         Option sleepTimeOption = OptionBuilder.withLongOpt(SLEEP_TIME_OPTION)
                 .withArgName("seconds")
                 .hasArg()
                 .withDescription("interval in seconds, on expiry it scanning input directory will be invoked.")
                 .isRequired()
+                .withType(Number.class)
                 .create("s");
+
+        Option numThreadsOption = OptionBuilder.withLongOpt(NUM_THREADS_OPTION)
+                .withArgName("number")
+                .hasArg()
+                .withDescription("number of threads, >= 1")
+                .isRequired()
+                .withType(Number.class)
+                .create("n");
 
         Option helpOption = OptionBuilder.withLongOpt(HELP_OPTION)
                 .withDescription("show this help :)")
@@ -65,6 +81,12 @@ public class Runner {
         options.addOption(outputDirOption);
         options.addOption(sleepTimeOption);
         options.addOption(helpOption);
+        options.addOption(numThreadsOption);
+
+        int numThreads = -1;
+        int sleepTime = -1; // in seconds
+        File inputDir = null;
+        File outputDir = null;
 
         CommandLineParser cmdLinePosixParser = new PosixParser();// создаем Posix парсер
 
@@ -74,11 +96,35 @@ public class Runner {
                 formatter.printHelp("fsArchiver", options);
             }
 
-            String inputDirValue = commandLine.getOptionValue(INPUT_DIR_OPTION);// если такая опция есть, то получаем переданные ей аргументы
-            System.out.println("We try to inputDir: " + inputDirValue);// выводим переданный логин
+            inputDir = ((File)commandLine.getParsedOptionValue(INPUT_DIR_OPTION));
+            outputDir = ((File)commandLine.getParsedOptionValue(OUTPUT_DIR_OPTION));
+            numThreads = ((Number)commandLine.getParsedOptionValue(NUM_THREADS_OPTION)).intValue();
+            sleepTime = ((Number)commandLine.getParsedOptionValue(SLEEP_TIME_OPTION)).intValue();
+
+            LOGGER.debug("input dir: " + inputDir);
+            LOGGER.debug("output dir: " + outputDir);
+            LOGGER.debug("num of threads: " + numThreads);
+            LOGGER.debug("sleep time: " + sleepTime);
         } catch (ParseException e) {
             LOGGER.error("Error on process commandline args: " + e.getLocalizedMessage());
             formatter.printHelp("fsArchiver", options);
+        }
+
+        ExecutorService service = null;
+        try {
+            service = Executors.newFixedThreadPool(numThreads);
+            Worker worker = new Worker(inputDir, outputDir, service);
+
+            for(;;) {
+                worker.work();
+                Thread.sleep(1000 * sleepTime);
+            }
+        } catch (InterruptedException e) {
+            LOGGER.error("Interrupted", e);
+        } catch (ZipException e) {
+            LOGGER.error("Zip error", e);
+        } finally {
+            service.shutdown();
         }
     }
 }

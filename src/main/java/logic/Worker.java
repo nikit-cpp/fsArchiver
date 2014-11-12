@@ -22,27 +22,28 @@ public class Worker {
     private File inputDir;
     private File outputDir;
     private FsPool fsPool;
-    private int nThreads = 4;
 
-    public Worker(File inputDir, File outputDir){
+    private ExecutorService service;
+
+    public Worker(File inputDir, File outputDir, ExecutorService service) {
         this.inputDir=inputDir;
         this.outputDir=outputDir;
         this.fsPool = new FsPool();
+        this.service = service;
     }
 
-    public void work() throws Exception{
+    public void work() throws ZipException, InterruptedException{
         List<File> files = fsPool.getNewFiles(inputDir);
         zip(files, outputDir);
     }
 
     // TODO Возможен перенос в отдельный класс при необходимости
-    private void zip(final List<File> inputFilesList, final File outputDir) throws ZipException {
+    private void zip(final List<File> inputFilesList, final File outputDir) throws ZipException, InterruptedException {
         final ZipParameters parameters = new ZipParameters();
         parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
         parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 
         // МНОГОПОТОЧНОСТЬ
-        ExecutorService service = Executors.newFixedThreadPool(nThreads);
         List<Callable<Void>> processFileTasks = new ArrayList<Callable<Void>>();
         for(final File inputFile: inputFilesList){
 
@@ -60,26 +61,8 @@ public class Worker {
                 }
             });
         }
-        try {
-            List<Future<Void>> futures = service
-                    .invokeAll(processFileTasks);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            service.shutdown();
-        }
 
-        // ОДНОПОТОЧНОСТЬ
-        /*for(File inputFile: inputFilesList) {
-            File outFile = convertInputFileToOutputFile(inputFile, outputDir);
-            ZipFile zipFile = new ZipFile(outFile);
-
-            if(inputFile.isDirectory()){
-                zipFile.addFolder(inputFile, parameters);
-            }else {
-                zipFile.addFile(inputFile, parameters);
-            }
-        }*/
+        service.invokeAll(processFileTasks);
     }
 
     /**

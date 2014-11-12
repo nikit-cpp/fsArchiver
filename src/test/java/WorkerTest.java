@@ -13,6 +13,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.junit.Assert.assertTrue;
 
@@ -20,9 +22,11 @@ public class WorkerTest {
 
     File inputDir = new File("src/test/resources");
     File outputDir = new File("src/test/out-resources");
+    ExecutorService service;
 
     @Before
     public void setUp() throws Exception {
+        service = Executors.newFixedThreadPool(4);
         //outputDir.delete();
         outputDir.mkdir();
     }
@@ -30,6 +34,7 @@ public class WorkerTest {
     @After
     public void tearDown() throws Exception {
         //outputDir.delete();
+        service.shutdown();
     }
 
     @Test
@@ -41,7 +46,7 @@ public class WorkerTest {
         int count1 = listInput1.length;
         //create argument string
 
-        Worker worker = new Worker(inputDir, outputDir);
+        Worker worker = new Worker(inputDir, outputDir, service);
 
         //call businnes logic function
         worker.work();
