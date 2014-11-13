@@ -7,10 +7,7 @@ import net.lingala.zip4j.util.Zip4jConstants;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -20,7 +17,7 @@ import java.util.concurrent.Executors;
  * Created by nik on 05.11.14.
  */
 public class Runner {
-    static String filesDir = "/home/nik/images";
+    static final int EXIT_ERROR = 1;
     public static Logger LOGGER = Logger.getLogger(Runner.class);
 
     static String INPUT_DIR_OPTION = "input";
@@ -101,6 +98,12 @@ public class Runner {
             numThreads = ((Number)commandLine.getParsedOptionValue(NUM_THREADS_OPTION)).intValue();
             sleepTime = ((Number)commandLine.getParsedOptionValue(SLEEP_TIME_OPTION)).intValue();
 
+            if(!inputDir.exists())
+                throw new FileNotFoundException("Input dir '" + inputDir + "' not exists");
+
+            if(!outputDir.exists())
+                throw new FileNotFoundException("Output dir '" + outputDir  + "' not exists");
+
             LOGGER.debug("input dir: " + inputDir);
             LOGGER.debug("output dir: " + outputDir);
             LOGGER.debug("num of threads: " + numThreads);
@@ -108,6 +111,10 @@ public class Runner {
         } catch (ParseException e) {
             LOGGER.error("Error on process commandline args: " + e.getLocalizedMessage());
             formatter.printHelp("fsArchiver", options);
+            System.exit(EXIT_ERROR);
+        } catch (FileNotFoundException e) {
+            LOGGER.error("Error on getting File object: " + e.getLocalizedMessage());
+            System.exit(EXIT_ERROR);
         }
 
         ExecutorService service = null;
