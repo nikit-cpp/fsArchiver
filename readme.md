@@ -9,6 +9,6 @@ Linux launch example
 Features list
 =============
 * сравнение списков игнорируя порядок элементов `ListAssert.assertEquals` WorkerTest.java:88
-* использование Apache Commons CLI, преобразование аргументов в int и File
+* использование Apache Commons CLI, преобразование аргументов в `int` и `File`
 * "fat" jar
-* многопоточность через ExecutorService, Callable<Void>
+* многопоточность через `ExecutorService`, `Callable<Void>`
