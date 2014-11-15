@@ -4,6 +4,8 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,8 @@ public class Worker {
     private File outputDir;
     private FsPool fsPool;
 
+    public static Logger LOGGER = Logger.getLogger(Runner.class);
+
     private ExecutorService service;
 
     public Worker(File inputDir, File outputDir, ExecutorService service) {
@@ -34,6 +38,7 @@ public class Worker {
 
     public void work() throws ZipException, InterruptedException{
         List<File> files = fsPool.getNewFiles(inputDir);
+        LOGGER.info("Найдено " + files.size() + " новых файлов");
         zip(files, outputDir);
     }
 
@@ -49,6 +54,7 @@ public class Worker {
 
             processFileTasks.add(new Callable<Void>() {
                 public Void call() throws Exception {
+                    LOGGER.info("'" + inputFile + "' обрабатывается...");
                     File outFile = convertInputFileToOutputFile(inputFile, outputDir);
                     ZipFile zipFile = new ZipFile(outFile);
 
@@ -57,6 +63,7 @@ public class Worker {
                     }else {
                         zipFile.addFile(inputFile, parameters);
                     }
+                    LOGGER.info("'"+inputFile + "' -> '" + outFile + "' успешно");
                     return null;
                 }
             });
