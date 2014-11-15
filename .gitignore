@@ -8,3 +8,4 @@ target
 .idea
 *.iml
 src/test/out-resources/
+existed.xml

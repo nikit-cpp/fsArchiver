@@ -20,6 +20,8 @@ public class Runner {
     static final int EXIT_ERROR = 1;
     public static Logger LOGGER = Logger.getLogger(Runner.class);
 
+    public static String xmlFileName = "fileItems.xml";
+
     static String INPUT_DIR_OPTION = "input";
     static String OUTPUT_DIR_OPTION = "output";
     static String SLEEP_TIME_OPTION = "sleep";
@@ -118,9 +120,10 @@ public class Runner {
         }
 
         ExecutorService service = null;
+        XmlUtils xmlUtils = new JsefaXmlUtils(new File("existed.xml"));
         try {
             service = Executors.newFixedThreadPool(numThreads);
-            Worker worker = new Worker(inputDir, outputDir, service);
+            Worker worker = new Worker(inputDir, outputDir, service, xmlUtils);
 
             for(;;) {
                 worker.work();

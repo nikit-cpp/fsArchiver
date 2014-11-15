@@ -29,10 +29,10 @@ public class Worker {
 
     private ExecutorService service;
 
-    public Worker(File inputDir, File outputDir, ExecutorService service) {
+    public Worker(File inputDir, File outputDir, ExecutorService service, XmlUtils xmlUtils) {
         this.inputDir=inputDir;
         this.outputDir=outputDir;
-        this.fsPool = new FsPool();
+        this.fsPool = new FsPool(xmlUtils);
         this.service = service;
     }
 

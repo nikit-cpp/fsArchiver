@@ -23,7 +23,7 @@ public class FsPoolTest {
     public void setUp(){
         if(newFile!=null && newFile.exists())
             newFile.delete();
-        fsPool = new FsPool();
+        fsPool = new FsPool(new FakeXmlUtils());
     }
 
     @After

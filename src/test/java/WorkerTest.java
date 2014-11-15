@@ -46,7 +46,7 @@ public class WorkerTest {
         int count1 = listInput1.length;
         //create argument string
 
-        Worker worker = new Worker(inputDir, outputDir, service);
+        Worker worker = new Worker(inputDir, outputDir, service, new FakeXmlUtils());
 
         //call businnes logic function
         worker.work();
