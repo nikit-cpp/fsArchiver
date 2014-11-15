@@ -1,5 +1,7 @@
 package logic;
 
+import xml.XmlUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;

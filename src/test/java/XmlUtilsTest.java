@@ -1,7 +1,6 @@
-import junit.framework.TestCase;
 import logic.FileItem;
-import logic.JsefaXmlUtils;
-import logic.XmlUtils;
+import xml.JsefaXmlUtils;
+import xml.XmlUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

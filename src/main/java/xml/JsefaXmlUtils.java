@@ -1,5 +1,8 @@
-package logic;
+package xml;
 
+import logic.FileItem;
+import logic.Runner;
+import org.apache.log4j.Logger;
 import org.jsefa.xml.XmlDeserializer;
 import org.jsefa.xml.XmlIOFactory;
 import org.jsefa.xml.XmlSerializer;
@@ -17,6 +20,8 @@ import java.util.List;
  * https://github.com/oasits/JSefa/tree/master/samples/xml/yellow_pages/src/xml/yellowpages
  */
 public class JsefaXmlUtils implements XmlUtils {
+
+    private static Logger LOGGER = Logger.getLogger(JsefaXmlUtils.class);
 
     private File xmlFile;
     private Path pathXmlFile;
@@ -69,8 +74,14 @@ public class JsefaXmlUtils implements XmlUtils {
             }
 
             deserializer.close(true);
-            return convertToObj(list);
+            List<FileItem> ret = convertToObj(list);
+            LOGGER.info("Загружена информация о " + ret.size() + " ранее обработанных файлах");
+            for(FileItem item: ret){
+                LOGGER.debug(item);
+            }
+            return ret;
         } catch (IOException e) {
+            LOGGER.info("Не найдена информация о ранее архивированных файлах");
             return new ArrayList<FileItem>();
         }
     }

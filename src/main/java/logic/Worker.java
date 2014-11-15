@@ -5,14 +5,13 @@ import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 import org.apache.log4j.Logger;
+import xml.XmlUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * Created by nik on 09.11.14.
@@ -25,7 +24,7 @@ public class Worker {
     private File outputDir;
     private FsPool fsPool;
 
-    public static Logger LOGGER = Logger.getLogger(Runner.class);
+    private static Logger LOGGER = Logger.getLogger(Runner.class);
 
     private ExecutorService service;
 

@@ -1,15 +1,14 @@
 package logic;
 
-import net.lingala.zip4j.core.ZipFile;
+import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
+import xml.FakeXmlUtils;
+import xml.JsefaXmlUtils;
+import xml.XmlUtils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,16 +16,17 @@ import java.util.concurrent.Executors;
  * Created by nik on 05.11.14.
  */
 public class Runner {
-    static final int EXIT_ERROR = 1;
-    public static Logger LOGGER = Logger.getLogger(Runner.class);
+    public static final int EXIT_ERROR = 1;
+    private static Logger LOGGER = Logger.getLogger(Runner.class);
 
-    public static String xmlFileName = "fileItems.xml";
+    public static String xmlFileName = "existed.xml";
 
-    static String INPUT_DIR_OPTION = "input";
-    static String OUTPUT_DIR_OPTION = "output";
-    static String SLEEP_TIME_OPTION = "sleep";
-    static String HELP_OPTION = "help";
-    static String NUM_THREADS_OPTION = "threads";
+    private static final String INPUT_DIR_OPTION = "input";
+    private static final String OUTPUT_DIR_OPTION = "output";
+    private static final String SLEEP_TIME_OPTION = "sleep";
+    private static final String HELP_OPTION = "help";
+    private static final String NUM_THREADS_OPTION = "threads";
+    private static final String PERSIST_FILE_INFO = "persist-file-info";
 
     /**
      *
@@ -70,6 +70,10 @@ public class Runner {
                 .withType(Number.class)
                 .create("n");
 
+        Option persistOption = OptionBuilder.withLongOpt(PERSIST_FILE_INFO)
+                .withDescription("read & store info about already processed files to " + xmlFileName)
+                .create("p");
+
         Option helpOption = OptionBuilder.withLongOpt(HELP_OPTION)
                 .withDescription("show this help :)")
                 .create("h");
@@ -81,6 +85,7 @@ public class Runner {
         options.addOption(sleepTimeOption);
         options.addOption(helpOption);
         options.addOption(numThreadsOption);
+        options.addOption(persistOption);
 
         int numThreads = -1;
         int sleepTime = -1; // in seconds
@@ -89,10 +94,18 @@ public class Runner {
 
         CommandLineParser cmdLinePosixParser = new PosixParser();// создаем Posix парсер
 
+        XmlUtils xmlUtils=null;
+
         try {
             CommandLine commandLine = cmdLinePosixParser.parse(options, args);// парсим командную строку
             if(commandLine.hasOption(HELP_OPTION)){
                 formatter.printHelp("fsArchiver", options);
+            }
+
+            if(commandLine.hasOption(PERSIST_FILE_INFO)){
+                xmlUtils = new JsefaXmlUtils(new File(xmlFileName));
+            }else{
+                xmlUtils = new FakeXmlUtils();
             }
 
             inputDir = ((File)commandLine.getParsedOptionValue(INPUT_DIR_OPTION));
@@ -106,10 +119,10 @@ public class Runner {
             if(!outputDir.exists())
                 throw new FileNotFoundException("Output dir '" + outputDir  + "' not exists");
 
-            LOGGER.debug("input dir: " + inputDir);
-            LOGGER.debug("output dir: " + outputDir);
-            LOGGER.debug("num of threads: " + numThreads);
-            LOGGER.debug("sleep time: " + sleepTime);
+            LOGGER.info("input dir: " + inputDir);
+            LOGGER.info("output dir: " + outputDir);
+            LOGGER.info("num of threads: " + numThreads);
+            LOGGER.info("sleep time: " + sleepTime);
         } catch (ParseException e) {
             LOGGER.error("Error on process commandline args: " + e.getLocalizedMessage());
             formatter.printHelp("fsArchiver", options);
@@ -120,7 +133,6 @@ public class Runner {
         }
 
         ExecutorService service = null;
-        XmlUtils xmlUtils = new JsefaXmlUtils(new File("existed.xml"));
         try {
             service = Executors.newFixedThreadPool(numThreads);
             Worker worker = new Worker(inputDir, outputDir, service, xmlUtils);

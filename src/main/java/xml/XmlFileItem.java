@@ -1,4 +1,4 @@
-package logic;
+package xml;
 
 import org.jsefa.xml.annotation.XmlDataType;
 import org.jsefa.xml.annotation.XmlElement;
