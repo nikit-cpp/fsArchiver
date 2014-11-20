@@ -1,6 +1,6 @@
 Building
 ========
-From project's folder `fsArchiver`:
+From project's folder `fsArchiver`:  
 `mvn package`
 
 Windows launch example
