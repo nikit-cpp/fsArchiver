@@ -1,7 +1,6 @@
 package xml;
 
 import logic.FileItem;
-import logic.Runner;
 import org.apache.log4j.Logger;
 import org.jsefa.xml.XmlDeserializer;
 import org.jsefa.xml.XmlIOFactory;
@@ -80,7 +79,7 @@ public class JsefaXmlUtils implements XmlUtils {
                 LOGGER.debug(item);
             }
             return ret;
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.info("Не найдена информация о ранее архивированных файлах");
             return new ArrayList<FileItem>();
         }
