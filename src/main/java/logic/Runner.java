@@ -1,6 +1,5 @@
 package logic;
 
-import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
