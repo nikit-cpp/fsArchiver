@@ -1,5 +1,6 @@
 Building
 ========
+Проект собирается на jdk7+  
 From project's folder `fsArchiver`:  
 `mvn package`
 
