@@ -1,10 +1,22 @@
+Building
+========
+From project's folder `fsArchiver`:
+`mvn package`
+
 Windows launch example
 ======================
-`java -jar fsArchiver.jar -i "C:\\вх папка" -o "C:\\вых папка" -s 1 -n 8`
+`cd target`
+`java -Dfile.encoding=Cp866 -jar fsArchiver.jar -i "C:\\вх папка" -o "C:\\вых папка" -s 1 -n 8 -p`
 
 Linux launch example
 ====================
-`java -jar fsArchiver.jar -i /home/nik/music/ -o "/home/nik/tmp/Безымянная папка" -s 1 -n 8`
+`cd target`
+`java -jar fsArchiver.jar -i /home/nik/music/ -o "/home/nik/tmp/Безымянная папка" -s 1 -n 8 -p`
+
+Get help:
+=========
+`cd target`
+`java -jar fsArchiver.jar -h`
 
 Features list
 =============
