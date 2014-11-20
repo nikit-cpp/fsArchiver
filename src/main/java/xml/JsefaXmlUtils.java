@@ -63,7 +63,7 @@ public class JsefaXmlUtils implements XmlUtils {
     @Override
     public List<FileItem> readFromXml() {
         try {
-            reader = Files.newBufferedReader(pathXmlFile, Charset.defaultCharset());
+            reader = Files.newBufferedReader(pathXmlFile, Charset.forName("utf8"));
 
             deserializer.open(reader);
 
