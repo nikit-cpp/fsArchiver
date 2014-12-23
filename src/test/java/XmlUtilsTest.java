@@ -1,5 +1,5 @@
 import logic.FileItem;
-import xml.JsefaXmlUtils;
+import xml.XStreamXmlUtils;
 import xml.XmlUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -19,7 +19,7 @@ public class XmlUtilsTest {
     @Before
     public void setUp() throws Exception {
         xmlFile = new File("src/test/resources/xml.xml");
-        xmlUtils = new JsefaXmlUtils(xmlFile);
+        xmlUtils = new XStreamXmlUtils(xmlFile);
         xmlFile.delete();
     }
 

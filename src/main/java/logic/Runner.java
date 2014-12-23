@@ -4,7 +4,7 @@ import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 import xml.FakeXmlUtils;
-import xml.JsefaXmlUtils;
+import xml.XStreamXmlUtils;
 import xml.XmlUtils;
 
 import java.io.*;
@@ -102,7 +102,7 @@ public class Runner {
             }
 
             if(commandLine.hasOption(PERSIST_FILE_INFO)){
-                xmlUtils = new JsefaXmlUtils(new File(xmlFileName));
+                xmlUtils = new XStreamXmlUtils(new File(xmlFileName));
             }else{
                 xmlUtils = new FakeXmlUtils();
             }
