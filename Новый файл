@@ -1,0 +1,11 @@
+1. Ищем и ставим Groovy, снимаем галочки, ибо несколько сайтов (Update Site) умерло
+2. Ставим m2e connector for groovy
+http://dist.springsource.org/release/GRECLIPSE/e4.4
+Чтобы убрать красный крестик с проекта, Maven -> Update
+Проблемы
+========
+Новые проекты, импортированные через Import -> Maven -> From scm
+импортируются не правильно, нет настроек Build Path
+Решение
+-------
+удалить папку .metadata из workspace
