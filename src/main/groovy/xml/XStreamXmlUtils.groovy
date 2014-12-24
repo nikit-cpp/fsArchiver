@@ -68,17 +68,17 @@ public class XStreamXmlUtils implements XmlUtils {
 	@Override
 	public List<FileItem> readFromXml() {
 		Reader reader=null;
-		ObjectInputStream in=null;
+		ObjectInputStream ins=null;
 		try {
 			reader = Files.newBufferedReader(pathXmlFile,
 					Charset.forName("utf8"));
 
-			in = xstream.createObjectInputStream(reader);
+			ins = xstream.createObjectInputStream(reader);
 			List<FileItem> list = new ArrayList<FileItem>();
 			
 			try{
 				while (true) {
-					FileItem obj = (FileItem)in.readObject();
+					FileItem obj = (FileItem)ins.readObject();
 					list.add(obj);
 				}
 			}catch(java.io.EOFException e){
@@ -96,8 +96,8 @@ public class XStreamXmlUtils implements XmlUtils {
 			return new ArrayList<FileItem>();
 		}finally{
 			try {
-				if(in!=null)
-					in.close();
+				if(ins!=null)
+					ins.close();
 				if(reader!=null)
 					reader.close();
 			} catch (IOException e) {
