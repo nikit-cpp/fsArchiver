@@ -13,6 +13,10 @@
 		<mainClass>logic.Runner</mainClass>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
+		        <maven.compiler>2.5.1</maven.compiler>
+        <groovy.all>RELEASE</groovy.all>
+        <groovy.eclipse.batch>RELEASE</groovy.eclipse.batch>
+        <groovy.eclipse.compiler>RELEASE</groovy.eclipse.compiler>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,52 +57,50 @@
 			<artifactId>xstream</artifactId>
 			<version>1.4.7</version>
 		</dependency>
-		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-			<!-- any version of Groovy \>= 1.8.2 should work here -->
-			<version>2.3.7</version>
-		</dependency>
-	</dependencies>
+
+		  <dependency>
+    <groupId>org.codehaus.groovy</groupId>
+    <artifactId>groovy-all</artifactId>
+    <version>1.8.6</version>
+  </dependency>
+
+</dependencies>
 
 	<build>
 		<plugins>
 		  <plugin>
-      <groupId>org.codehaus.gmaven</groupId>
-      <artifactId>gmaven-plugin</artifactId>
-      <version>1.2</version>
-      <configuration> 
-        <providerSelection>1.7</providerSelection> 
-      </configuration> 
-      <dependencies>
-          <dependency>
-            <groupId>org.codehaus.gmaven.runtime</groupId>
-            <artifactId>gmaven-runtime-1.7</artifactId>
-            <version>1.2</version>
-            <exclusions>
-              <exclusion>
-                <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-all</artifactId>
-              </exclusion>
-            </exclusions>
-          </dependency>
-          <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>1.7.0</version>
-          </dependency>
-      </dependencies>
-      <executions>
-          <execution>
-              <goals>
-                  <goal>generateStubs</goal>
-                  <goal>compile</goal>
-                  <goal>generateTestStubs</goal>
-                  <goal>testCompile</goal>
-              </goals>
-          </execution>
-      </executions>
+    <groupId>org.codehaus.groovy</groupId>
+    <artifactId>groovy-eclipse-compiler</artifactId>
+    <version>2.8.0-01</version>
+    <extensions>true</extensions>
   </plugin>
+  <plugin>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <!-- 2.8.0-01 and later require maven-compiler-plugin 3.0 or higher -->
+    <version>3.0</version>
+    <configuration>
+      <compilerId>groovy-eclipse-compiler</compilerId>
+      <!-- set verbose to be true if you want lots of uninteresting messages -->
+      <verbose>true</verbose>
+    </configuration>
+    <dependencies>
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-eclipse-compiler</artifactId>
+        <version>2.8.0-01</version>
+      </dependency>
+      <!-- for 2.8.0-01 and later you must have an explicit dependency on groovy-eclipse-batch -->
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-eclipse-batch</artifactId>
+        <version>2.1.5-03</version>
+        <!-- or choose a different compiler version -->
+        <!-- <version>1.8.6-01</version> -->
+        <!-- <version>1.7.10-06</version> -->
+</dependency>
+ </dependencies>
+  </plugin>
+		
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.5</version>
@@ -139,50 +141,6 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.gmavenplus
-										</groupId>
-										<artifactId>
-											gmavenplus-plugin
-										</artifactId>
-										<versionRange>
-											[1.2,)
-										</versionRange>
-										<goals>
-											<goal>removeTestStubs</goal>
-											<goal>generateStubs</goal>
-											<goal>removeStubs</goal>
-											<goal>addSources</goal>
-											<goal>
-												testGenerateStubs
-											</goal>
-											<goal>testCompile</goal>
-											<goal>compile</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 
 </project>
