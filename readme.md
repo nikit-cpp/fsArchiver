@@ -38,10 +38,10 @@ Help -> Install New Software, вставляем http://dist.springsource.org/re
 ![](https://img-fotki.yandex.ru/get/15591/165433899.1/0_132076_9dd2ae0c_orig)
 **После установки ПКМ по проекту, Maven -> Update**
 
-Проблемы
-========
-Новые проекты, импортированные через Import -> Maven -> From scm
-импортируются не правильно, нет настроек Build Path
+Решение проблем
+===============
+1. Вместо Build Path-папок src/main/java, src/main/groovy видна папка src, нет настроек Build Path
+--------------------------------------------------------------------------------------------------
 Решение
 -------
 удалить папку .metadata из workspace
