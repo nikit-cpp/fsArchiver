@@ -1,13 +1,9 @@
 package xml;
 
 import logic.FileItem;
-
 import org.apache.log4j.Logger;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-
-import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,8 +13,6 @@ import java.util.List;
 
 /**
  * Created by nik on 15.11.14.
- * https://github.com/oasits/JSefa/tree/master/samples
- * /xml/yellow_pages/src/xml/yellowpages
  */
 public class XStreamXmlUtils implements XmlUtils {
 
@@ -55,10 +49,8 @@ public class XStreamXmlUtils implements XmlUtils {
 			LOGGER.error("Some errors while writing List to xml file", e);
 		}finally{
 			try {
-				if(out!=null)
-					out.close();
-				if(writer!=null)
-					writer.close();
+				out?.close();
+				writer?.close();
 			} catch (IOException e) {
 				LOGGER.error("Some errors while closing resources", e);
 			}
@@ -96,10 +88,8 @@ public class XStreamXmlUtils implements XmlUtils {
 			return new ArrayList<FileItem>();
 		}finally{
 			try {
-				if(ins!=null)
-					ins.close();
-				if(reader!=null)
-					reader.close();
+				ins?.close();
+				reader?.close();
 			} catch (IOException e) {
 				LOGGER.error("Some errors while closing resources", e);
 			}
