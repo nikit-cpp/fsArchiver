@@ -22,6 +22,8 @@ public class XStreamXmlUtils implements XmlUtils {
 
 	private File xmlFile;
 	private Path pathXmlFile;
+	
+	public final String UTF8 = "utf8"
 
 	public XStreamXmlUtils(File xmlFile) {
 		xstream = new XStream(new DomDriver());
@@ -37,7 +39,7 @@ public class XStreamXmlUtils implements XmlUtils {
 			xmlFile.delete();
 			xmlFile.createNewFile();
 			writer = Files.newBufferedWriter(pathXmlFile,
-					Charset.forName("UTF8"), StandardOpenOption.WRITE);
+					Charset.forName(UTF8), StandardOpenOption.WRITE);
 
 			out = xstream.createObjectOutputStream(writer, "rootNodeName");
 
@@ -63,7 +65,7 @@ public class XStreamXmlUtils implements XmlUtils {
 		ObjectInputStream ins=null;
 		try {
 			reader = Files.newBufferedReader(pathXmlFile,
-					Charset.forName("utf8"));
+					Charset.forName(UTF8));
 
 			ins = xstream.createObjectInputStream(reader);
 			List<FileItem> list = new ArrayList<FileItem>();

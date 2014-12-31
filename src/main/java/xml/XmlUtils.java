@@ -1,8 +1,6 @@
 package xml;
 
 import logic.FileItem;
-
-import java.io.File;
 import java.util.List;
 
 /**
