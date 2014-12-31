@@ -5,7 +5,7 @@
 
 	<groupId>groupId</groupId>
 	<artifactId>fsArchiver</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<description>for Groovy integration use http://groovy-lang.org/groovyc.html</description>
 
 	<properties>
