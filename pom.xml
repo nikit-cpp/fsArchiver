@@ -6,6 +6,7 @@
 	<groupId>groupId</groupId>
 	<artifactId>fsArchiver</artifactId>
 	<version>0.0.2</version>
+	<description>for Groovy integration use http://groovy-lang.org/groovyc.html</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
@@ -13,6 +14,11 @@
 		<mainClass>logic.Runner</mainClass>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.version>3.2</maven.compiler.version>
+
+		<groovy.eclipse.compiler.version>2.9.1-01</groovy.eclipse.compiler.version>
+		<groovy.eclipse.batch.version>2.3.7-01</groovy.eclipse.batch.version>
+		<groovy.version>2.3.9</groovy.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -54,10 +60,49 @@
 			<version>1.4.7</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy</artifactId>
+			<version>${groovy.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.groovy</groupId>
+				<artifactId>groovy-eclipse-compiler</artifactId>
+				<version>${groovy.eclipse.compiler.version}</version>
+				<!-- Нужно для работы юнит-тестов -->
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<!-- 2.8.0-01 and later require maven-compiler-plugin 3.0 or higher -->
+				<version>${maven.compiler.version}</version>
+				<configuration>
+					<compilerId>groovy-eclipse-compiler</compilerId>
+					<!-- set verbose to be true if you want lots of uninteresting messages -->
+					<verbose>true</verbose>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.groovy</groupId>
+						<artifactId>groovy-eclipse-compiler</artifactId>
+						<version>${groovy.eclipse.compiler.version}</version>
+					</dependency>
+					<!-- for 2.8.0-01 and later you must have an explicit dependency on 
+						groovy-eclipse-batch -->
+					<dependency>
+						<groupId>org.codehaus.groovy</groupId>
+						<artifactId>groovy-eclipse-batch</artifactId>
+						<version>${groovy.eclipse.batch.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.5</version>
