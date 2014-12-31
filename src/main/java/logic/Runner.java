@@ -1,8 +1,10 @@
 package logic;
 
 import net.lingala.zip4j.exception.ZipException;
+
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
+
 import xml.FakeXmlUtils;
 import xml.XStreamXmlUtils;
 import xml.XmlUtils;
@@ -32,7 +34,8 @@ public class Runner {
      * @param args входная и выходная директории
      *
      */
-    public static void main(String... args){
+    @SuppressWarnings("static-access")
+	public static void main(String... args){
         Options options = new Options();
 
         Option inputDirOption = OptionBuilder.withLongOpt(INPUT_DIR_OPTION)
@@ -111,12 +114,18 @@ public class Runner {
             outputDir = ((File)commandLine.getParsedOptionValue(OUTPUT_DIR_OPTION));
             numThreads = ((Number)commandLine.getParsedOptionValue(NUM_THREADS_OPTION)).intValue();
             sleepTime = ((Number)commandLine.getParsedOptionValue(SLEEP_TIME_OPTION)).intValue();
-
+            
             if(!inputDir.exists())
                 throw new FileNotFoundException("Input dir '" + inputDir + "' not exists");
 
             if(!outputDir.exists())
                 throw new FileNotFoundException("Output dir '" + outputDir  + "' not exists");
+            
+            if(inputDir.getAbsolutePath().equals(System.getProperty("user.dir")))
+            	throw new WrongDirectoryException("Input dir shouldn't be a current, because " + xmlFileName + " will change permanently");
+            
+            if(inputDir.equals(outputDir))
+            	throw new WrongDirectoryException("Input dir shouldn't be equals outputDir");
 
             LOGGER.info("input dir: " + inputDir);
             LOGGER.info("output dir: " + outputDir);
@@ -126,7 +135,7 @@ public class Runner {
             LOGGER.error("Error on process commandline args: " + e.getLocalizedMessage());
             formatter.printHelp("fsArchiver", options);
             System.exit(EXIT_ERROR);
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | WrongDirectoryException e) {
             LOGGER.error("Error on getting File object: " + e.getLocalizedMessage());
             System.exit(EXIT_ERROR);
         }
