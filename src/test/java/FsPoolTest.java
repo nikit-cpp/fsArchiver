@@ -1,4 +1,3 @@
-break compiling
 import logic.FsPool;
 import org.junit.After;
 import org.junit.Before;
@@ -18,7 +17,7 @@ import static org.junit.Assert.*;
  */
 public class FsPoolTest {
     FsPool fsPool;
-    File newFile = new File("src/test/resources/5");
+    File newFile = new File("src/test/resources/5_");
     @Before
     public void setUp(){
         if(newFile!=null && newFile.exists())
