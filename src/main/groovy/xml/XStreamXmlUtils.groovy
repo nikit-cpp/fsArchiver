@@ -4,6 +4,7 @@ import logic.FileItem;
 import org.apache.log4j.Logger;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.StaxDriver
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +27,7 @@ public class XStreamXmlUtils implements XmlUtils {
 	public final String UTF8 = "utf8"
 
 	public XStreamXmlUtils(File xmlFile) {
-		xstream = new XStream(new DomDriver());
+		xstream = new XStream();
 		this.xmlFile = xmlFile;
 		pathXmlFile = xmlFile.toPath();
 	}
@@ -86,7 +87,7 @@ public class XStreamXmlUtils implements XmlUtils {
 			}
 			return list;
 		} catch (Exception e) {
-			LOGGER.info("Не найдена информация о ранее архивированных файлах");
+			LOGGER.info("Не найдена информация о ранее архивированных файлах", e)
 			return new ArrayList<FileItem>();
 		}finally{
 			try {
