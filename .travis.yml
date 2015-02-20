@@ -4,4 +4,4 @@ jdk:
   - oraclejdk7
 os:
   - linux
-  - osx
+  - windows
