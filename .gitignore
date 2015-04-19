@@ -7,5 +7,6 @@ target
 .project
 .idea
 *.iml
+dependency-reduced-pom.xml
 src/test/out-resources/
 existed.xml
